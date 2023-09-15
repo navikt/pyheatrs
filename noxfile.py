@@ -31,7 +31,8 @@ def dev(session: nox.Session):
     """
     if VENV_DIR.exists():
         session.error(
-            f"virtualenv ({VENV_DIR}) already exists, delete it to run this session successfully"
+            f"virtualenv ({VENV_DIR}) already exists, "
+            "delete it to run this session successfully"
         )
     session.install("virtualenv")
     session.run("virtualenv", os.fsdecode(VENV_DIR), silent=True)
@@ -47,8 +48,8 @@ def dev(session: nox.Session):
 @nox.session
 def lint(session: nox.Session):
     session.install("-rrequirements-lint.txt")
-    session.run("black", "pyheatrs/.")
-    session.run("ruff", "check", "pyheatrs/.")
+    session.run("black", ".")
+    session.run("ruff", "check", ".")
 
 
 @nox.session

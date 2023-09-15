@@ -30,7 +30,8 @@ def default_field(size: tuple[int, int]) -> np.ndarray:
 
 def estimate_dt(size: tuple[int, int], diffusion: float) -> float:
     """
-    Calculate the largest stable time step (delta time) for the given field size and diffusion constant
+    Calculate the largest stable time step (delta time) for the given field size and
+    diffusion constant
 
     :param size: Tuple representing the field size
     :param diffusion: Diffusion constant that will be used in the heat equations
