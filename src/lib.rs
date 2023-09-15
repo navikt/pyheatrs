@@ -3,6 +3,8 @@ use numpy::{IntoPyArray, PyArrayDyn, PyReadonlyArrayDyn};
 use pyo3::prelude::*;
 
 /// A Python module for the heat equations implemented in Rust
+///
+/// To complete this module properly using [`ndarray`](https://docs.rs/ndarray/0.15.6/ndarray/) will be required.
 #[pymodule]
 fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
     /// Evolve the heat equation over the given field
@@ -14,7 +16,7 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
     /// - `iter` - Number of iterations to perform
     fn evolve(field: ArrayViewD<'_, f64>, a: f64, dt: f64, iter: u64) -> ArrayD<f64> {
         // TODO: Implement heat equations here
-        ArrayD::zeros(field.shape())
+        ArrayD::zeros(field.raw_dim())
     }
 
     // Wrapper for the above pure Rust function
