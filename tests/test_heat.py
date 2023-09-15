@@ -27,6 +27,14 @@ def medium_field():
     return pyheatrs.py.default_field(size), a, dt
 
 
+@pytest.fixture
+def large_field():
+    a = 0.5
+    size = (1000, 1000)
+    dt = pyheatrs.py.estimate_dt(size, a)
+    return pyheatrs.py.default_field(size), a, dt
+
+
 @pytest.mark.benchmark(group="small")
 def test_python_small(small_field, benchmark):
     field, a, dt = small_field
@@ -53,3 +61,9 @@ def test_rust_medium(medium_field, benchmark):
     res = benchmark(pyheatrs.rs.evolve, field, a, dt, 10)
     true = pyheatrs.py.evolve(field, a, dt, 10)
     assert np.allclose(res, true)
+
+
+@pytest.mark.benchmark(group="large")
+def test_rust_large(large_field, benchmark):
+    field, a, dt = large_field
+    benchmark(pyheatrs.rs.evolve, field, a, dt, 100)
