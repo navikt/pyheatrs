@@ -22,7 +22,7 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
         for _ in 0..iter {
             Zip::from(next.slice_mut(s![1..-1, 1..-1]))
                 .and(curr.windows((3, 3)))
-                .for_each(|n, w| {
+                .par_for_each(|n, w| {
                     let up = &w[(0, 1)];
                     let down = &w[(2, 1)];
                     let left = &w[(1, 0)];
