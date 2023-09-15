@@ -20,7 +20,7 @@ VENV_DIR = pathlib.Path("./.venv").resolve()
 @nox.session
 def dev(session: nox.Session):
     """
-    Sets up a python development environment for the project.
+    Sets up a python development environment for the project
 
     This session will:
     - Create a python virtualenv for the session
@@ -47,13 +47,16 @@ def dev(session: nox.Session):
 
 @nox.session
 def lint(session: nox.Session):
+    """Run black and ruff to lint"""
     session.install("-rrequirements-lint.txt")
     session.run("black", ".")
     session.run("ruff", "check", ".")
+    # TODO Run `mypy`here
 
 
 @nox.session
 def test(session: nox.Session):
+    """Run pytest without benchmarking enabled"""
     session.install("maturin")
     session.install("-rrequirements-dev.txt")
     session.run_always("maturin", "develop")
@@ -62,6 +65,7 @@ def test(session: nox.Session):
 
 @nox.session
 def bench(session: nox.Session):
+    """Run pytest with benchmarking enabled"""
     session.install("maturin")
     session.install("-rrequirements-dev.txt")
     session.install(".")
