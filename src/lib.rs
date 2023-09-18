@@ -11,10 +11,17 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
     ///
     /// # Arguments
     /// - `field` - Immutable array view of the field to evolve
+    /// - `dxdy` - Delta for X and Y dimensions
     /// - `a` - Diffusion constant to use for the evolution
     /// - `dt` - Time delta for the evolutions
     /// - `iter` - Number of iterations to perform
-    fn evolve(field: ArrayViewD<'_, f64>, a: f64, dt: f64, iter: u64) -> ArrayD<f64> {
+    fn evolve(
+        field: ArrayViewD<'_, f64>,
+        dxdy: (f64, f64),
+        a: f64,
+        dt: f64,
+        iter: u64,
+    ) -> ArrayD<f64> {
         // TODO: Implement heat equations here
         ArrayD::zeros(field.raw_dim())
     }
@@ -25,12 +32,13 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
     fn evolve_py<'py>(
         py: Python<'py>,
         field: PyReadonlyArrayDyn<'py, f64>,
+        dxdy: (f64, f64),
         a: f64,
         dt: f64,
         iter: u64,
     ) -> &'py PyArrayDyn<f64> {
         let f = field.as_array();
-        let res = evolve(f, a, dt, iter);
+        let res = evolve(f, dxdy, a, dt, iter);
         res.into_pyarray(py)
     }
     Ok(())
