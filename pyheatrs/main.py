@@ -37,6 +37,7 @@ def __render(args):
     def _update_fig(_, field):
         field[...] = field_update(
             field,
+            (args.delta, args.delta),
             args.diffusion,
             args.dt,
             args.steps,
@@ -90,10 +91,16 @@ def main_cli():
     parser.add_argument(
         "--steps", type=int, default=10, help="Number of steps between renders"
     )
+    parser.add_argument(
+        "--delta",
+        type=float,
+        default=0.01,
+        help="Delta between points along the X and Y dimensions",
+    )
     args = parser.parse_args()
     if args.size:
         args.width, args.height = __parse_size(args.size)
-    args.dt = pyheatrs.py.estimate_dt((args.width, args.height), args.diffusion)
+    args.dt = pyheatrs.py.estimate_dt((args.delta, args.delta), args.diffusion)
     __render(args)
 
 
