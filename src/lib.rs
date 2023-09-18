@@ -14,11 +14,11 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
     /// - `a` - Diffusion constant to use for the evolution
     /// - `dt` - Time delta for the evolutions
     /// - `iter` - Number of iterations to perform
-    fn evolve(field: ArrayView2<'_, f64>, a: f64, dt: f64, iter: u64) -> Array2<f64> {
+    fn evolve(field: ArrayView2<'_, f64>, dxdy: (f64, f64), a: f64, dt: f64, iter: u64) -> Array2<f64> {
         let mut curr = field.clone().to_owned();
         let mut next = field.clone().to_owned();
-        let dx = ((field.shape()[0] - 2) as f64).powi(2);
-        let dy = ((field.shape()[1] - 2) as f64).powi(2);
+        let dx = dxdy.0.powi(2);
+        let dy = dxdy.1.powi(2);
         for _ in 0..iter {
             Zip::from(next.slice_mut(s![1..-1, 1..-1]))
                 .and(curr.windows((3, 3)))
@@ -45,12 +45,13 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
     fn evolve_py<'py>(
         py: Python<'py>,
         field: PyReadonlyArray2<'py, f64>,
+        dxdy: (f64, f64),
         a: f64,
         dt: f64,
         iter: u64,
     ) -> &'py PyArray2<f64> {
         let f = field.as_array();
-        let res = evolve(f, a, dt, iter);
+        let res = evolve(f, dxdy, a, dt, iter);
         res.into_pyarray(py)
     }
     Ok(())
