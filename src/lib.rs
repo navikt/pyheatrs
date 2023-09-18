@@ -23,12 +23,12 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
             Zip::from(next.slice_mut(s![1..-1, 1..-1]))
                 .and(curr.windows((3, 3)))
                 .par_for_each(|n, w| {
-                    let up = &w[(0, 1)];
-                    let down = &w[(2, 1)];
-                    let left = &w[(1, 0)];
-                    let right = &w[(1, 2)];
+                    let left = &w[(0, 1)];
+                    let right = &w[(2, 1)];
+                    let up = &w[(1, 0)];
+                    let down = &w[(1, 2)];
                     let mid = &w[(1, 1)];
-                    *n = mid + a * dt * ((up - 2.0 * mid + down) / dx + (left - 2.0 * mid + right) / dy);
+                    *n = mid + a * dt * ((right - 2.0 * mid + left) / dx + (down - 2.0 * mid + up) / dy);
             });
             std::mem::swap(&mut curr, &mut next);
         }

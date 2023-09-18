@@ -32,7 +32,7 @@ def __render(args):
     field_update = pyheatrs.py.evolve if args.impl == "python" else pyheatrs.rs.evolve
     field = pyheatrs.py.default_field((args.width, args.height))
     fig, ax = plt.subplots()
-    img = ax.imshow(field.T, cmap="viridis", aspect="auto", interpolation="nearest")
+    img = ax.imshow(field.T, cmap="viridis", aspect="auto")
 
     def _update_fig(_, field):
         field[...] = field_update(
@@ -84,7 +84,7 @@ def main_cli():
     parser.add_argument(
         "--frames",
         type=int,
-        default=1000,
+        default=30,
         help="Number of iterations to evolve the heat equations",
     )
     parser.add_argument(

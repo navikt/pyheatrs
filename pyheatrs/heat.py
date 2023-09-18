@@ -37,8 +37,8 @@ def estimate_dt(size: tuple[int, int], diffusion: float) -> float:
     :param diffusion: Diffusion constant that will be used in the heat equations
     :returns: time delta in seconds
     """
-    dx = size[0] ** 2
-    dy = size[1] ** 2
+    dx = float(size[0] ** 2)
+    dy = float(size[1] ** 2)
     return (dx * dy) / (2.0 * diffusion * (dx + dy))
 
 
@@ -56,13 +56,13 @@ def evolve(field: np.ndarray, a: float, dt: float, iter: int) -> np.ndarray:
     for _ in range(iter):
         for i in range(1, x_size - 1):
             for j in range(1, y_size - 1):
-                up = curr[i - 1, j]
-                down = curr[i + 1, j]
-                left = curr[i, j - 1]
-                right = curr[i, j + 1]
+                left = curr[i - 1, j]
+                right = curr[i + 1, j]
+                up = curr[i, j - 1]
+                down = curr[i, j + 1]
                 mid = curr[i, j]
                 next[i, j] = mid + a * dt * (
-                    (up - 2.0 * mid + down) / dx + (left - 2.0 * mid + right) / dy
+                    (right - 2.0 * mid + left) / dx + (down - 2.0 * mid + up) / dy
                 )
         curr, next = next, curr
     if iter % 2 == 0:
