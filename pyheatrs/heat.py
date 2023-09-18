@@ -52,7 +52,6 @@ def evolve(
     curr = field.copy()
     next = field.copy()
     x_size, y_size = curr.shape
-    # Subtract 2 from size to account for boundary
     dx = dxdy[0] ** 2
     dy = dxdy[1] ** 2
     for _ in range(iter):

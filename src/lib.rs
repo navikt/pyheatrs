@@ -1,4 +1,4 @@
-use numpy::ndarray::{Array2, ArrayView2, Zip, s};
+use numpy::ndarray::{s, Array2, ArrayView2, Zip};
 use numpy::{IntoPyArray, PyArray2, PyReadonlyArray2};
 use pyo3::prelude::*;
 
@@ -11,10 +11,17 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
     ///
     /// # Arguments
     /// - `field` - Immutable array view of the field to evolve
+    /// - `dxdy` - Delta for X and Y dimensions
     /// - `a` - Diffusion constant to use for the evolution
     /// - `dt` - Time delta for the evolutions
     /// - `iter` - Number of iterations to perform
-    fn evolve(field: ArrayView2<'_, f64>, dxdy: (f64, f64), a: f64, dt: f64, iter: u64) -> Array2<f64> {
+    fn evolve(
+        field: ArrayView2<'_, f64>,
+        dxdy: (f64, f64),
+        a: f64,
+        dt: f64,
+        iter: u64,
+    ) -> Array2<f64> {
         let mut curr = field.clone().to_owned();
         let mut next = field.clone().to_owned();
         let dx = dxdy.0.powi(2);
@@ -28,8 +35,9 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
                     let up = &w[(1, 0)];
                     let down = &w[(1, 2)];
                     let mid = &w[(1, 1)];
-                    *n = mid + a * dt * ((right - 2.0 * mid + left) / dx + (down - 2.0 * mid + up) / dy);
-            });
+                    *n = mid
+                        + a * dt * ((right - 2.0 * mid + left) / dx + (down - 2.0 * mid + up) / dy);
+                });
             std::mem::swap(&mut curr, &mut next);
         }
         if iter % 2 == 0 {
