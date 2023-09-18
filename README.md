@@ -100,8 +100,9 @@ The project is structured as follows:
     - `heat.py` contains the heat equation implementation in Python
 - `src/` contains the Rust code
     - `lib.rs` contains the Rust implementation of the heat equation
-- `target/` is a temporary directory which is created when building the project
+- `presentation/` contains the introduction (in Norwegian) to the project
 - `pyproject.toml` is the Python project configuration
     - Add new Python dependencies here if needed
 - `Cargo.toml` is the Rust project configuration
     - Add new Rust dependencies here if needed
+- `noxfile.py` contains the `nox` sessions defined for this project
