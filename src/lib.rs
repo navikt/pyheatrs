@@ -1,5 +1,5 @@
-use numpy::ndarray::{ArrayD, ArrayViewD};
-use numpy::{IntoPyArray, PyArrayDyn, PyReadonlyArrayDyn};
+use numpy::ndarray::{Array2, ArrayView2};
+use numpy::{IntoPyArray, PyArray2, PyReadonlyArray2};
 use pyo3::prelude::*;
 
 /// A Python module for the heat equations implemented in Rust
@@ -16,14 +16,14 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
     /// - `dt` - Time delta for the evolutions
     /// - `iter` - Number of iterations to perform
     fn evolve(
-        field: ArrayViewD<'_, f64>,
+        field: ArrayView2<'_, f64>,
         dxdy: (f64, f64),
         a: f64,
         dt: f64,
         iter: u64,
-    ) -> ArrayD<f64> {
+    ) -> Array2<f64> {
         // TODO: Implement heat equations here
-        ArrayD::zeros(field.raw_dim())
+        Array2::zeros(field.raw_dim())
     }
 
     // Wrapper for the above pure Rust function
@@ -31,12 +31,12 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
     #[pyo3(name = "evolve")]
     fn evolve_py<'py>(
         py: Python<'py>,
-        field: PyReadonlyArrayDyn<'py, f64>,
+        field: PyReadonlyArray2<'py, f64>,
         dxdy: (f64, f64),
         a: f64,
         dt: f64,
         iter: u64,
-    ) -> &'py PyArrayDyn<f64> {
+    ) -> &'py PyArray2<f64> {
         let f = field.as_array();
         let res = evolve(f, dxdy, a, dt, iter);
         res.into_pyarray(py)
