@@ -28,21 +28,23 @@ def default_field(size: tuple[int, int]) -> np.ndarray:
     return field
 
 
-def estimate_dt(size: tuple[int, int], diffusion: float) -> float:
+def estimate_dt(dxdy: tuple[float, float], diffusion: float) -> float:
     """
     Calculate the largest stable time step (delta time) for the given field size and
     diffusion constant
 
-    :param size: Tuple representing the field size
+    :param dxdy: Tuple representing the delta between x and y coordinates
     :param diffusion: Diffusion constant that will be used in the heat equations
     :returns: time delta in seconds
     """
-    dx = float(size[0] ** 2)
-    dy = float(size[1] ** 2)
+    dx = float(dxdy[0] ** 2)
+    dy = float(dxdy[1] ** 2)
     return (dx * dy) / (2.0 * diffusion * (dx + dy))
 
 
-def evolve(field: np.ndarray, a: float, dt: float, iter: int) -> np.ndarray:
+def evolve(
+    field: np.ndarray, dxdy: tuple[float, float], a: float, dt: float, iter: int
+) -> np.ndarray:
     """
     Evolve the heat equation over the given field
     """
@@ -51,8 +53,8 @@ def evolve(field: np.ndarray, a: float, dt: float, iter: int) -> np.ndarray:
     next = field.copy()
     x_size, y_size = curr.shape
     # Subtract 2 from size to account for boundary
-    dx = float((x_size - 2) ** 2)
-    dy = float((y_size - 2) ** 2)
+    dx = dxdy[0] ** 2
+    dy = dxdy[1] ** 2
     for _ in range(iter):
         for i in range(1, x_size - 1):
             for j in range(1, y_size - 1):
