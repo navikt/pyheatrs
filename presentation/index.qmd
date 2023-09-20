@@ -152,7 +152,7 @@ fn main() {
 
 Varmespredning i et perfekt medium
 
-[GitHub lenke](...)
+[GitHub lenke](https://github.com/navikt/pyheatrs)
 
 ## Formål
 
