@@ -106,3 +106,7 @@ The project is structured as follows:
 - `Cargo.toml` is the Rust project configuration
     - Add new Rust dependencies here if needed
 - `noxfile.py` contains the `nox` sessions defined for this project
+
+## Visualization of output
+
+![heat equations shown over a 2D grid](./presentation/images/result.gif)
