@@ -13,8 +13,8 @@ def default_field(size: tuple[int, int]) -> np.ndarray:
     # Setup boundary conditions for our field
     field[:, 0] = 85.0  # Top row
     field[:, -1] = 5.0  # Bottom row
-    field[0, :] = 20.0  # Right column
-    field[-1, :] = 70.0  # Left column
+    field[0, :] = 20.0  # Left column
+    field[-1, :] = 70.0  # Right column
 
     radius = size[0] // 6
     orig_x = size[0] // 2
