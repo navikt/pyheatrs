@@ -1,0 +1,66 @@
+/*-- scss:defaults --*/
+$body-bg: #ffffff;
+$body-color: #262626;
+$link-color: #0067c5;
+$link-color-hover: #0056b4;
+$border-color: rgba(0, 0, 0, 0.1);
+
+$sidebar-fg: #0067c5;
+
+$h1-font-size: 40px;
+$h2-font-size: 32px;
+$h3-font-size: 24px;
+
+/*-- Presentation configuration --*/
+
+$presentation-heading-color: #c30000 !default;
+$code-block-bg: #f1f1f1 !default;
+$code-bg: #f1f1f1 !default;
+$light-bg-code-color: #254b6d !default;
+
+/*-- scss:rules --*/
+
+.ingress {
+    font-size: 20px;
+}
+
+
+#title-block-header.quarto-title-block.default .quarto-title-meta > div {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+#title-block-header.quarto-title-block.default .quarto-title-meta-heading {
+    text-transform: none;
+    margin-top: unset;
+    font-size: unset;
+    opacity: unset;
+}
+
+.quarto-title-meta-heading::after {
+    content: ":"
+}
+
+#title-block-header.quarto-title-block.default .quarto-title-meta-contents {
+    font-size: unset;
+}
+
+div.sidebar-item-container .active, div.sidebar-item-container .show > .nav-link, div.sidebar-item-container .sidebar-link > code {
+    color: #262626;
+}
+
+@media (min-width: 992px) {
+    .sidebar-navigation .sidebar-item {
+        font-size: unset;
+    }
+
+    .sidebar-link {
+        padding-left: 0.5rem;
+        border-left: 4px solid transparent;
+    }
+
+    .sidebar-item-container .active {
+        border-left: 4px solid #0056b4;
+    }
+}

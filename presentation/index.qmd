@@ -1,0 +1,278 @@
+---
+title: "Python + Rust = 🥰"
+subtitle: "Introduksjon til prosjektet"
+format:
+  revealjs:
+    highlight-style: pygments
+    preview-links: auto
+    logo: assets/nav-logo-red.svg
+    theme: [default, assets/nav.scss]
+language: assets/_quarto_language.yml
+---
+
+## Rust
+
+:::: {.columns}
+::: {.column width="60%"}
+- Moderne
+- Trygt
+- Raskt
+  - (Lavnivå)
+:::
+
+::: {.column width="40%"}
+![](./images/not_desired_behavior.svg)
+:::
+::::
+
+::: {.aside}
+[Hjemmeside `rust-lang.org`](https://www.rust-lang.org/)
+:::
+
+---
+
+### Moderne
+
+- Første utgave i 2015
+- Hentet inspirasjon fra [forskjellige språk](https://doc.rust-lang.org/reference/influences.html)
+  - Finner tegn på `C/C++`, `ML`, `Haskell`, mf.
+- Fokus på dokumentasjon
+  - [Rust boka](https://doc.rust-lang.org/book/)
+  - [Lær Rust gjennom eksempler](https://doc.rust-lang.org/rust-by-example/)
+  - [`docs.rs` dokumentasjon på alle publiserte Rust pakker](https://docs.rs/about)
+
+---
+
+::: {.absolute top=200}
+````rust
+let key_values: HashMap<_, _> = config
+        .lines()
+        .filter(|line| !line.starts_with('#'))
+        .filter_map(|line| line.split_once('='))
+        .map(|(key, value)| (key.trim(), value.trim()))
+        .collect();
+````
+:::
+
+---
+
+### Moderne - Hjelpemidler
+
+:::: {.columns}
+::: {.column width="70%"}
+
+::: {.incremental}
+- `cargo` - Byggeverktøy
+- [`crates.io`](https://crates.io) - Enkel deling av kode
+- [`docs.rs`](https://docs.rs) - Dokumentasjon for kode
+- [`rustup`](https://rustup.rs/) - Enkel installering
+- `rustfmt` - Kodeformattering
+- `clippy` - "Intelligent" linting
+- `rust-analyzer` - Language server støtte
+:::
+:::
+
+::: {.column width="30%"}
+![](./images/cargo.png)
+:::
+::::
+
+## Eksempel - Levetidsannotering
+
+```rust
+fn longest(x: &str, y: &str) -> &str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
+
+::: {.aside}
+Lånt fra [Rust boka](https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html)
+:::
+
+## Eksempel - Levetidsannotering
+
+```{.bash code-line-numbers="|12-13"}
+$ cargo run
+   Compiling chapter10 v0.1.0 (file:///projects/chapter10)
+error[E0106]: missing lifetime specifier
+ --> src/main.rs:9:33
+  |
+9 | fn longest(x: &str, y: &str) -> &str {
+  |               ----     ----     ^ expected named lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `x` or `y`
+help: consider introducing a named lifetime parameter
+  |
+9 | fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+  |           ++++     ++          ++          ++
+
+For more information about this error, try `rustc --explain E0106`.
+error: could not compile `chapter10` due to previous error
+```
+
+## Eksempel - Levetidsannotering
+
+``` {.rust code-line-numbers="1"}
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
+
+. . .
+
+<br />
+
+````rust
+fn main() {
+  let a = "hei";
+  let b = "hade";
+  let result = longest(a, b);
+}
+````
+. . .
+
+<br />
+
+````rust
+fn main() {
+  let a = "hei";
+  let result = longest(a, "hade");
+}
+````
+
+# Prosjektet
+
+Varmespredning i et perfekt medium
+
+[GitHub lenke](...)
+
+## Formål
+
+::: {.incremental}
+- Bli kjent med Rust
+- Jobbe med et delt Python - Rust prosjekt
+- Se mulighetene for å kombinere der det kan gi gevinst
+  - **Ikke** bytte ut all Data Science Python med Rust!
+:::
+
+## Teorien
+
+Ønsker å modellere hvordan varme sprer seg i et perfekt (2D)
+medium^[[Utfyllende
+informasjon](https://enccs.github.io/sycl-workshop/heat-equation/#id1)].
+
+. . .
+
+Vi hopper bukk over matematikken...
+
+Kjører en konvulsjon/stensil operasjon:
+
+:::: {.columns}
+::: {.column width="70%"}
+![](./images/stencil.svg)
+:::
+::: {.column width="30%"}
+![](./images/stencil-fixed-boundaries.svg)
+:::
+::::
+
+## Samarbeidet mellom Python og Rust
+
+I hovedsak fasilitert gjennom [`maturin`](https://www.maturin.rs/) og
+[`pyo3`](https://pyo3.rs/)
+
+::: {.incremental}
+- `maturin` er ansvarlig for å bygge prosjektet
+  - Passer på at kompilerte biblioteker ligger der Python forventer
+  - Forstår både `Cargo.toml` og `pyprojects.toml`
+  - Gjør det enkelt å publisere til [PyPi](https://pypi.org/)
+- `pyo3` er et Rust bibliotek
+  - Oversetter mellom Rust og Python
+:::
+
+## Prosjekt oppsett
+
+`maturin new` - setter opp et fult fungerende system.
+
+. . .
+
+````{.bash code-line-numbers="|6,11"}
+pyheatrs
+├── Cargo.toml      # Rust konfigurasjon
+├── noxfile.py      # Nox definisjoner
+├── pyheatrs
+│  ├── __init__.py  # Import oppsett for Python kode
+│  ├── heat.py      # Python kode
+│  └── main.py      # Python kommandolinje verktøy for visualisering
+├── pyproject.toml  # Python konfigurasjon
+├── README.md       # Beskrivelse av prosjektet
+├── src
+│  └── lib.rs       # Rust kode
+└── tests
+   └── test_heat.py # Testing og benchmark oppsett
+````
+
+::: {.aside}
+[Mer informasjon om prosjekt oppsett](https://www.maturin.rs/project_layout)
+:::
+
+## Komme i gang
+
+- Bruk [`nox`](https://nox.thea.codes/en/stable/index.html) for å sette opp
+arbeidsmiljø
+  - `nox -l` - List opp alle sesjoner
+  - `nox -s dev` - Set opp arbeidsmiljø
+  - `nox -s test` - Kjør tester
+
+- Se gjennom `heat.py` for å bli kjent med Python koden og hva som skal
+implementeres i Rust
+
+::: {.aside}
+Installer `nox` utenfor arbeidsmiljø med `python3 -m pip install --user nox`
+:::
+
+## Tips
+
+- [Rust boka om
+løkker](https://doc.rust-lang.org/book/ch03-05-control-flow.html#looping-through-a-collection-with-for)
+- [Rust boka om
+eierskap](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html)
+- I oppsettet er det allerede brukt et bibliotek for å håndtere arrays -
+[`ndarray`](https://docs.rs/ndarray/0.15.6/ndarray/)
+  - Kanskje det er noen smarte metoder her 🤔
+- Et løsningsforslag ligger under `solution` grenen i `git`
+
+## Resultat
+
+![](./images/result.gif)
+
+## Utvidet oppgave
+
+Isteden for å sende hvert enkelt parameter kan man gjøre det om til en
+dataklasse i Python. Hvordan kan vi sende inn et Python objekt til Rust og
+hvordan kan Rust hente ut attributter?
+
+
+````python
+from dataclasses import dataclass
+from functools import cached_property
+import numpy as np
+
+@dataclass
+class DiffusionField:
+  field: np.ndarray
+  constant: float = 0.5
+  dxdy: tuple[float, float] = (0.01, 0.01)
+
+  @cached_property
+  def dt(self):
+    return estimate_dt(self.dxdy, self.constant)
+````
