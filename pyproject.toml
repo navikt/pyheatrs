@@ -4,6 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "pyheatrs"
+license = {text = "MIT License"}
 requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Rust",
