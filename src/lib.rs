@@ -41,9 +41,9 @@ fn pyheatrs(_py: Python, m: &PyModule) -> PyResult<()> {
             std::mem::swap(&mut curr, &mut next);
         }
         if iter % 2 == 0 {
-            next.to_owned()
+            next
         } else {
-            curr.to_owned()
+            curr
         }
     }
 
