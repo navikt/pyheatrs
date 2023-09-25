@@ -30,7 +30,7 @@ Create a virtual environment with your default Python interpreter.
 
 ```bash
 # Create the environment
-python3 -m venv .venv --upgrade deps
+python3 -m venv .venv --upgrade-deps
 # Activate the environment so that future installs only happen within the environment
 source .venv/bin/activate
 ```
