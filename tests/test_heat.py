@@ -74,3 +74,12 @@ def test_rust_medium(medium_field, benchmark):
 def test_rust_large(large_field, benchmark):
     field, dxdy, a, dt = large_field
     benchmark(pyheatrs.rs.evolve, field, dxdy, a, dt, 100)
+
+
+@pytest.mark.benchmark(group="large")
+def test_gpu_large(large_field, benchmark):
+    field, dxdy, a, dt = large_field
+    field2 = field.astype(np.float32, order="C")
+    res = benchmark(pyheatrs.rs.evolve_gpu, field2, dxdy, a, dt, 100)
+    true = pyheatrs.rs.evolve(field, dxdy, a, dt, 100)
+    assert np.allclose(res, true, atol=0.5)

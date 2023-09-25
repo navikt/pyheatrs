@@ -11,6 +11,10 @@ name = "pyheatrs"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.19", features = ["extension-module"]}
-numpy = "0.19"
+bytemuck = { version = "1.14", features = ["derive"]}
+futures-intrusive = "0.5"
 ndarray = { version = "0.15", features = ["rayon"]}
+numpy = "0.19"
+pollster = "0.3"
+pyo3 = { version = "0.19", features = ["extension-module"]}
+wgpu = "0.17"

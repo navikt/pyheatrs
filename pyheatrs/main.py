@@ -29,8 +29,9 @@ def __render(args):
     import matplotlib.pyplot as plt
     from matplotlib.animation import FuncAnimation
 
-    field_update = pyheatrs.py.evolve if args.impl == "python" else pyheatrs.rs.evolve
+    field_update = pyheatrs.py.evolve if args.impl == "python" else pyheatrs.rs.evolve_gpu
     field = pyheatrs.py.default_field((args.width, args.height))
+    field = field.astype(np.float32, order="C")
     fig, ax = plt.subplots()
     img = ax.imshow(field.T, cmap="viridis", aspect="auto")
 
