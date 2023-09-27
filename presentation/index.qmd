@@ -224,13 +224,15 @@ pyheatrs
 [Mer informasjon om prosjekt oppsett](https://www.maturin.rs/project_layout)
 :::
 
-## Komme i gang
+## Komme i gang {.smaller}
 
 - Bruk [`nox`](https://nox.thea.codes/en/stable/index.html) for å sette opp
 arbeidsmiljø
   - `nox -l` - List opp alle sesjoner
   - `nox -s dev` - Set opp arbeidsmiljø
   - `nox -s test` - Kjør tester
+  - `maturin develop` - For å bygge manuelt
+  - `pytest` - For å kjøre tester manuelt
 
 - Se gjennom `heat.py` for å bli kjent med Python koden og hva som skal
 implementeres i Rust
